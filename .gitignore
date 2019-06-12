@@ -1,0 +1,4 @@
+.idea/
+conf/
+db.sqlite3
+Project/settings.py

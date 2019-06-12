@@ -1,10 +1,203 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
+
+    <!-- SITE TITTLE -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}DramScripts{% endblock title %}</title>
+
+    <!-- FAVICON -->
+    <link href="{% static 'img/favicon.png' %}" rel="shortcut icon">
+    <!-- PLUGINS CSS STYLE -->
+    <!-- <link href="plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet"> -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'admin/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/bootstrap/css/bootstrap-slider.css' %}">
+    <!-- Font Awesome -->
+    <link href="{% static 'core/plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <!-- Owl Carousel -->
+    <link href="{% static 'core/plugins/slick-carousel/slick/slick.css' %}" rel="stylesheet">
+    <link href="{% static 'core/plugins/slick-carousel/slick/slick-theme.css' %}" rel="stylesheet">
+    <!-- Fancy Box -->
+    <link href="{% static 'core/plugins/fancybox/jquery.fancybox.pack.css' %}" rel="stylesheet">
+    <link href="{% static 'core/plugins/jquery-nice-select/css/nice-select.css' %}" rel="stylesheet">
+    <!-- CUSTOM CSS -->
+    <link href="{% static 'core/css/style.css' %}" rel="stylesheet">
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
 </head>
-<body>
-$END$
+
+<body class="body-wrapper">
+
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-expand-lg navbar-light navigation">
+                    <a class="navbar-brand" href="{% url 'home' %}">
+                        <!-- <img src="images/logo.png" alt=""> -->
+                        <h1>DramScripts</h1>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ml-auto main-nav ">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'home' %}">Home</a>
+                            </li>
+                            <li class="nav-item dropdown dropdown-slide">
+                                <a class="nav-link" href="dashboard.html">Add New Script</a>
+                            </li>
+                            <li class="nav-item dropdown dropdown-slide">
+                                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                                   aria-expanded="false">
+                                    Pages <span><i class="fa fa-angle-down"></i></span>
+                                </a>
+                                <!-- Dropdown list -->
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="about-us.html">About Us</a>
+                                    <a class="dropdown-item" href="contact-us.html">Contact Us</a>
+                                    <a class="dropdown-item" href="user-profile.html">User Profile</a>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <ul class="navbar-nav ml-auto mt-10">
+                            {% if not user.is_authenticated %}
+                                <li class="nav-item">
+                                <a class="nav-link login-button" href="{% url 'login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white add-button" href="{% url 'signup' %}"><i
+                                        class="fa fa-plus-circle"></i> Register</a>
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link btn round" href="{% url 'logout' %}">Logout</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+<!--==================================
+=            User Profile            =
+===================================-->
+{#        added message framework#}
+    {% if messages %}
+        <div class="col-md-12 col-sm-12">
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+{#    message framework ends here#}
+{% block body %}
+
+
+{% endblock body %}
+<!--============================
+=            Footer            =
+=============================-->
+
+<footer class="footer section section-sm">
+    <!-- Container Start -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-7 offset-md-1 offset-lg-0">
+                <!-- About -->
+                <div class="block about">
+                    <!-- footer logo -->
+                    <!-- <img src="images/logo-footer.png" alt=""> -->
+                    <h1>DramScripts</h1>
+                    <!-- description -->
+                    <p class="alt-color">This is a website where people can practice
+                        their scripts without the help of coactors.</p>
+                </div>
+            </div>
+
+            <!-- Link list -->
+            <div class="col-lg-2 col-md-3 offset-md-1 offset-lg-0">
+                <div class="block">
+                    <ul>
+                        <h4>Usefull Links</h4>
+                        <li><a href="contact-us.html">Category</a></li>
+                        <li><a href="about-us.html">Single Page</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Container End -->
+</footer>
+<!-- Footer Bottom -->
+<footer class="footer-bottom">
+    <!-- Container Start -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-12">
+                <!-- Copyright -->
+                <div class="copyright">
+                    <p>Copyright ©
+                        <script>
+                            var CurrentYear = new Date().getFullYear()
+                            document.write(CurrentYear)
+                        </script>
+                        . All Rights Reserved, theme by <a class="text-primary" href="{% url 'home' %}" target="_blank">DramScripts</a>
+                    </p>
+                </div>
+            </div>
+            <div class="col-sm-6 col-12">
+
+            </div>
+        </div>
+    </div>
+    <!-- Container End -->
+    <!-- To Top -->
+    <div class="top-to">
+        <a id="top" class="" href="#"><i class="fa fa-angle-up"></i></a>
+    </div>
+</footer>
+
+<!-- JAVASCRIPTS -->
+<script src="{% static 'core/plugins/jQuery/jquery.min.js' %}"></script>
+<script src="{% static 'admin/bootstrap/js/popper.min.js' %}"></script>
+<script src="{% static 'admin/bootstrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'admin/bootstrap/js/bootstrap-slider.js' %}"></script>
+<!-- tether js -->
+<script src="{% static 'core/plugins/tether/js/tether.min.js' %}"></script>
+<script src="{% static 'core/plugins/raty/jquery.raty-fa.js' %}"></script>
+<script src="{% static 'core/plugins/slick-carousel/slick/slick.min.js' %}"></script>
+<script src="{% static 'core/plugins/jquery-nice-select/js/jquery.nice-select.min.js' %}"></script>
+<script src="{% static 'core/plugins/fancybox/jquery.fancybox.pack.js' %}"></script>
+<script src="{% static 'core/plugins/smoothscroll/SmoothScroll.min.js' %}"></script>
+<!-- google map -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcABaamniA6OL5YvYSpB3pFMNrXwXnLwU&libraries=places"></script>
+<script src="{% static 'core/plugins/google-map/gmap.js' %}"></script>
+<script src="{% static 'core/js/script.js' %}"></script>
+
 </body>
+
 </html>
