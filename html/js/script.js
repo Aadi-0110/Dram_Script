@@ -6,6 +6,8 @@
     $("#inputSliderVal").text(slideEvt.value);
   });
   
+  $('#chatpop').popover();
+  
   //  Count Up
   function counter() {
     var oTop;
