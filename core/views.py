@@ -1,12 +1,18 @@
+import os
+from time import sleep
+
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.messages import constants
 from django.shortcuts import render, redirect, get_object_or_404
+import re
 
 # Create your views here.
+from Project.settings import BASE_DIR
 from core.forms import SignUpForm, ContactUsForm, UploadScriptForm
+from core.models import UploadScript, Script
 
 
 @login_required
@@ -60,8 +66,25 @@ def upload_script(request):
             user.created_by = request.user
             user.script_file = form.cleaned_data['script_file']
             user.save()
+            obj = get_object_or_404(UploadScript, script_file=user.script_file)
+            pk = obj.pk
             messages.add_message(request, constants.SUCCESS, message="Script Uploaded", )
-            return redirect('home')  # todo change it
+            return redirect('generate_script', pk)  # todo change it
     else:
         form = UploadScriptForm()
     return render(request, 'ScriptUpload.html', {'form': form})
+
+
+@login_required
+def generate_script(request, pk):
+    obj = get_object_or_404(UploadScript, pk=pk)
+    datas = open(obj.script_file.path)
+    try:
+        for i in datas.readlines():
+            sleep(.5)
+            index, character_name, dia = [re.sub(r'\"|\n|\\', '', j) for j in i.split('" ')]
+            Script(index=index, character_name=character_name, dialogue=dia, script=obj).save()
+    except IndexError:
+        pass
+    datas.close()
+    return redirect('home')

@@ -22,4 +22,5 @@ urlpatterns = [
     path('accounts/signup/', signup, name="signup"),
     path('contact/', contact_us, name="contact_us"),
     path('upload_script/', upload_script, name="upload_script"),
+    path('generate_script/<int:pk>/', generate_script, name="generate_script"),
 ]

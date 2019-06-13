@@ -21,3 +21,24 @@ class UploadScript(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Script(models.Model):
+    GENDER = (
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+    )
+
+    index = models.CharField(max_length=512)
+    character_name = models.CharField(max_length=512, null=False, blank=False)
+    dialogue = models.TextField(max_length=4096)
+    script = models.ForeignKey(UploadScript, on_delete=models.CASCADE, related_name="scripts_name")
+    audio = models.FileField(upload_to='audio/%y/%m/%d/', null=True, blank=True)
+    character_gender = models.CharField(max_length=255, choices=GENDER, default=GENDER[0][0])
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.script.title + "- index -" + str(self.index)
+
+    class Meta:
+        ordering = ['created_at']
