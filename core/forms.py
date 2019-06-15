@@ -1,8 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
+from django.forms import modelformset_factory
 
-from core.models import Contact, UploadScript, Character
+from core.models import Contact, UploadScript, Character, TrainedModel, Script
 
 
 class SignUpForm(UserCreationForm):
@@ -41,3 +42,26 @@ class CharacterForm(forms.Form):
 
     class Meta:
         fields = ['select_your_character']
+
+
+class GenderForm(forms.ModelForm):
+    character_name = forms.CharField(widget=forms.TextInput(attrs={'readonly': True}))
+
+    class Meta:
+        model = Character
+        fields = ['character_name', 'character_gender']
+
+
+GenderFormSet = modelformset_factory(Character, form=GenderForm)
+
+
+class TrainedModelForm(forms.ModelForm):
+    class Meta:
+        model = TrainedModel
+        fields = '__all__'
+
+
+# class ScriptAudioForm(forms.ModelForm):
+#     class Meta:
+#         model = Script
+#         fields = ['audio']

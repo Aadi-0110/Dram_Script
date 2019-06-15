@@ -36,21 +36,39 @@ class Script(models.Model):
     audio = models.FileField(upload_to='audio/%y/%m/%d/', null=True, blank=True)
     character_gender = models.CharField(max_length=255, choices=GENDER, default=GENDER[0][0])
     created_at = models.DateTimeField(auto_now_add=True)
+    sentiment = models.CharField(max_length=128)
 
     def __str__(self):
         return self.script.title + "- index -" + str(self.index)
 
     class Meta:
-        ordering = ['script']
+        ordering = ['created_at']
 
 
 class Character(models.Model):
+    GENDER = (
+        ('male', 'male'),
+        ('female', 'female'),
+    )
+
     character_name = models.CharField(max_length=512)
     script = models.ForeignKey(UploadScript, on_delete=models.CASCADE, related_name="characters")
     created_at = models.DateTimeField(auto_now_add=True)
+    character_gender = models.CharField(max_length=255, choices=GENDER, default=GENDER[0][0])
 
     def __str__(self):
         return self.character_name
 
     class Meta:
         ordering = ['script']
+
+
+class TrainedModel(models.Model):
+    model_name = models.CharField(max_length=128)
+    word2id = models.FileField(upload_to='trained_model/')
+    id2label = models.FileField(upload_to='trained_model/')
+    label2id = models.FileField(upload_to='trained_model/')
+    model_with_attentions = models.FileField(upload_to='trained_model/')
+
+    def __str__(self):
+        return self.model_name

@@ -54,26 +54,30 @@
                             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ml-auto main-nav ">
+                            {% if user.is_authenticated %}
                             <li class="nav-item active">
                                 <a class="nav-link" href="{% url 'home' %}">Home</a>
                             </li>
+
                             <li class="nav-item dropdown dropdown-slide">
                                 <a class="nav-link" href="{% url 'upload_script' %}">Add New Script</a>
                             </li>
                             <li class="nav-item dropdown dropdown-slide">
                                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                                    aria-expanded="false">
-                                    Pages <span><i class="fa fa-angle-down"></i></span>
+                                    Know More <span><i class="fa fa-angle-down"></i></span>
                                 </a>
                                 <!-- Dropdown list -->
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" href="{% url 'about_us' %}">About Us</a>
                                     <a class="dropdown-item" href="{% url 'contact_us' %}">Contact Us</a>
-                                    <a class="dropdown-item" href="user-profile.html">User Profile</a>
+{#                                    <a class="dropdown-item" href="user-profile.html">User Profile</a>#}
                                 </div>
                             </li>
+                            {% endif %}
                         </ul>
 
                         <ul class="navbar-nav ml-auto mt-10">
@@ -142,9 +146,11 @@
             <div class="col-lg-2 col-md-3 offset-md-1 offset-lg-0">
                 <div class="block">
                     <ul>
-                        <h4>Usefull Links</h4>
-                        <li><a href="contact-us.html">Category</a></li>
-                        <li><a href="about-us.html">Single Page</a></li>
+                        <h4>Useful Links</h4>
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'signup' %}">SignUp</a></li>
+                        <li><a href="{% url 'about_us' %}">About Us</a></li>
+                        <li><a href="{% url 'contact_us' %}">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
