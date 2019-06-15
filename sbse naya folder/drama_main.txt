@@ -1,0 +1,23 @@
+
+
+
+"PRATYUSH BHAIYA"  "Gladly you guys finally made it?"
+"ADITYA"  "Enjoyed every bug while working on it"
+"RAJAT BHAIYA" "Tell me who did what"
+"AMIT" "I worked on front end and enjoyed hitting on API's"
+"RANDOM ANGRY GIRL" "I am too angry and I will not even tell why I am angry just get lost"
+"RANDOM HAPPY GIRL" "I am too happy that I cannot express how much  happy and excited I am"
+"MANISH" " 80 percent of my work was google search and then in rest 20 % I  implemented deep learning model on analysing the emotions conveyed by the text used "
+"MOHIT"  " I analysed data set and trained the model for the above described model. "
+"PRATYUSH BHAIYA" " Keep it up"
+"ADITYA" "Working on it was really a dream come true"
+"RAJAT BHAIYA" "Now tell me what were the bugs you faced"
+"AMIT" "some API were too mean they were not responding even after sending request many times,but later I found that the  culprit was in our team."
+"ADITYA" "the culprit was  cors"
+"MANISH" "The toughest part was integrating all the front and back end and deep learning model and we were lucky Aditya helped us in all this"
+"AMIT"  "Hope you all liked it we put a lot of effort on this"
+"PRATYUSH BHAIYA" "you want the first prize now or you want to wait to not hamper other teams moral"
+"ADITYA" "Hahahaah"
+
+
+s
