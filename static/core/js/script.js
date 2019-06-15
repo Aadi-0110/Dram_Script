@@ -1,5 +1,25 @@
 (function ($) {
   'use strict';
+  
+  $("#input_slider").slider();
+  
+  $("#input_slider").on("slide", function(slideEvt) {
+    $("#inputSliderVal").text(slideEvt.value);
+  });
+  
+  $('#chatpop').popover();
+  
+  var cnt = 1;
+  
+  setInterval(function(){
+    cnt = cnt + 1;
+    if(cnt==4)cnt=1;
+    var dot = '';
+    for(var i=0;i<cnt;i++){
+      dot = dot + '.';
+    }
+    $('#dot').text(dot);
+  },600);
 
   //  Count Up
   function counter() {
