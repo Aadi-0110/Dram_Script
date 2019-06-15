@@ -1,0 +1,33 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+
+    <div class="col-md-10 offset-md-1 col-lg-8 offset-lg-0">
+        <!-- Recently Favorited -->
+        <div class="widget dashboard-container">
+          <h3 class="widget-header bg-gray p-3 text-center">Practice Script</h3>
+          <div class="chatbox">
+            <!-- others bubble -->
+            {% for data in datas %}
+              <p class='title text-left'>
+              <strong><em>{{ data.character_name }}<br></em></strong>
+              <button type="button" id="speech-bubble-left" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="right"
+              data-content="{{ data.dialogue }}">
+                  {{ data.dialogue }}
+              </button>
+            </p>
+              {% endfor %}
+              <!-- my bubble -->
+            <p class='title text-right'>
+              <strong><em>Johny<br></em></strong>
+              <button type="button" id="speech-bubble-right" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="right"
+              data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus.">
+                  This also works perfectly!!!
+              </button>
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+{% endblock content %}

@@ -14,7 +14,7 @@ class Contact(models.Model):
 
 
 class UploadScript(models.Model):
-    title = models.CharField(max_length=512)
+    title = models.CharField(max_length=512, unique=True)
     created_by = models.ForeignKey(User, on_delete=None, related_name="scripts")
     created_at = models.DateTimeField(auto_now_add=True)
     script_file = models.FileField(upload_to='script_files/%Y/%m/%d/', null=False, blank=False)
@@ -41,4 +41,16 @@ class Script(models.Model):
         return self.script.title + "- index -" + str(self.index)
 
     class Meta:
-        ordering = ['created_at']
+        ordering = ['script']
+
+
+class Character(models.Model):
+    character_name = models.CharField(max_length=512)
+    script = models.ForeignKey(UploadScript, on_delete=models.CASCADE, related_name="characters")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.character_name
+
+    class Meta:
+        ordering = ['script']

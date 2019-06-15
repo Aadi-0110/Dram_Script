@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block body %}
 <section class="dashboard section">
@@ -12,7 +13,7 @@
           <div class="widget user-dashboard-profile">
             <!-- User Image -->
             <div class="profile-thumb">
-              <img src="images/user/user-thumb.jpg" alt="" class="rounded-circle">
+              <img src="{% static 'core/images/user.jpeg' %}" alt="" class="rounded-circle">
             </div>
             <!-- User Name -->
             <h5 class="text-center">{{ user.first_name }}&nbsp;{{ user.last_name }}</h5>
@@ -38,7 +39,7 @@
         <!-- Recently Favorited -->
         <div class="widget dashboard-container my-adslist">
           <h3 class="widget-header">Scripts</h3>
-          <table class="table table-responsive product-dashboard-table">
+          <table class="table table-responsive product-dashboard-table" style="overflow-y: scroll;">
             <thead>
               <tr>
                 <th>S.No.</th>
@@ -47,22 +48,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              {% for script in scripts %}
+            <tr>
                 <td class="product-thumb">
-                  <h6 class='title'>1.</h6>
-                <td class="product-details">
-                  <h3 class="title">Script-1</h3>
+                  <h6 class='title'>{{ script.id }}.</h6>
+                <td class="product-title">
+                  <h3 class="title">{{ script.title }}</h3>
                 </td>
                 <td class="action" data-title="Action">
                   <div class="">
                     <ul class="list-inline justify-content-center">
                       <li class="list-inline-item">
-                        <a data-toggle="tooltip" data-placement="top" title="view" class="view" href="category.html">
+                        <a data-toggle="tooltip" data-placement="top" title="view" class="view" href="{% url 'view_all_script' script.id %}">
                           <i class="fa fa-eye"></i>
                         </a>
                       </li>
                       <li class="list-inline-item">
-                        <a class="edit" data-toggle="tooltip" data-placement="top" title="Play" href="">
+                        <a class="edit" data-toggle="tooltip" data-placement="top" title="Play" href="{% url 'who_are_you' script.id %}">
                           <i class="fa fa-play"></i>
                         </a>
                       </li>
@@ -75,6 +77,7 @@
                   </div>
                 </td>
               </tr>
+                {% endfor %}
             </tbody>
           </table>
         </div>

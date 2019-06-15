@@ -6,3 +6,4 @@ from .models import *
 admin.site.register(Contact)
 admin.site.register(UploadScript)
 admin.site.register(Script)
+admin.site.register(Character)

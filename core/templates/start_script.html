@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-10 offset-lg-0">
+        <!-- Recently Favorited -->
+        <div class="widget dashboard-container">
+          <h3 class="widget-header bg-gray p-3 text-center">Practice Script</h3>
+          <div class="chatbox">
+            <!-- others bubble -->
+            {% for data in datas %}
+                {% if data.character_name != ch %}
+              <p class='title text-left'>
+              <strong><em>{{ data.character_name }}<br></em></strong>
+              <button type="button" id="speech-bubble-left" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="right"
+              data-content="{{ data.dialogue }}">
+                  {{ data.dialogue }}
+              </button>
+            </p>
+                {% else %}
+                <p class='title text-right'>
+              <strong><em>{{ data.character_name }}<br></em></strong>
+              <button type="button" id="speech-bubble-right" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="right"
+              data-content="{{ data.dialogue }}">
+                  {{ data.dialogue }}
+              </button>
+            </p>
+                {% endif %}
+              {% endfor %}
+              <!-- my bubble -->
+
+          </div>
+
+        </div>
+      </div>
+        </div>
+    </div>
+
+{% endblock body %}

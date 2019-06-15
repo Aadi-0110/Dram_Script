@@ -60,7 +60,7 @@
                                 <a class="nav-link" href="{% url 'home' %}">Home</a>
                             </li>
                             <li class="nav-item dropdown dropdown-slide">
-                                <a class="nav-link" href="dashboard.html">Add New Script</a>
+                                <a class="nav-link" href="{% url 'upload_script' %}">Add New Script</a>
                             </li>
                             <li class="nav-item dropdown dropdown-slide">
                                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
@@ -69,8 +69,8 @@
                                 </a>
                                 <!-- Dropdown list -->
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="about-us.html">About Us</a>
-                                    <a class="dropdown-item" href="contact-us.html">Contact Us</a>
+                                    <a class="dropdown-item" href="{% url 'about_us' %}">About Us</a>
+                                    <a class="dropdown-item" href="{% url 'contact_us' %}">Contact Us</a>
                                     <a class="dropdown-item" href="user-profile.html">User Profile</a>
                                 </div>
                             </li>
