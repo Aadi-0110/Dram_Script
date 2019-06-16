@@ -81,12 +81,10 @@ def Voice_Box(text_input,emotion,gender):
             text=x.format(y)
         
         elif emotion=='angry':
-            x=' <voice-transformation type="Custom" glottal_tension="100%" breathiness="0%" pitch="67%" pitch_range="0%" timbre_extent="100%" rate="38%" hoarseness="0%" growl="0%" tremble="0%" timbre="map{400_522.5_1200_1200.0_3000_3000.0_4000_4000}"><express-as type="Excitement" level="74%"> {} </express-as></voice-transformation>'
+            x=' <voice-transformation type="Custom" glottal_tension="100%" breathiness="0%" pitch="67%" pitch_range="0%" timbre_extent="100%" rate="38%" hoarseness="0%" growl="0%" tremble="0%" ><express-as type="Excitement" level="74%"> {} </express-as></voice-transformation>'
 
             y=text_input
             text=x.format(y)
-            
-            
             
             
             
@@ -102,12 +100,13 @@ def Voice_Box(text_input,emotion,gender):
         
         os.system("mpg321 hello_world.mp3")
     return
+
         
         
         
         
         
-Voice_Box('hello hottie I am too soryy for this behaviour','apology','female')
+Voice_Box('I am uncertain about my life','uncertainty','female')
 
 
             
