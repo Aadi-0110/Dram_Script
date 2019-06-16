@@ -1,8 +1,71 @@
 /*=== MEDIA QUERY ===*/
+
 @import url("https://fonts.googleapis.com/css?family=Muli:300,400,600,700,800,900");
 body {
   line-height: 1.5;
   font-family: "Muli", sans-serif;
+}
+canvas {
+  /* display: block; */
+  vertical-align: top;
+}
+
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: -10px;
+} 
+
+.large-header {
+	position: absolute;
+  width: 100%;
+  height: 50px;
+  top: -20px;
+	/* background: red; */
+	overflow: hidden;
+	/* /*background-size: cover; */
+	background-position: center;
+	/* z-index: 1; */
+}
+
+#modal{
+  display:none;
+}
+
+#landingPage{
+  height: 600px;
+}
+
+#chatPlay{
+  color: red;
+}
+
+#audio{
+  display: inline-block;
+}
+.record{
+  background: white;
+  color: red;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: 90%;
+}
+.record:disabled{
+  visibility: hidden;
+  display: none;
+}
+
+.stop{
+  background: white;
+  color: red;
+  border-radius: 50%;
+  display: inline-block;
+  vertical-align: 90%;
+}
+.stop:disabled{
+  visibility: hidden;
+  display: none;
 }
 
 .card-img-top:hover{
@@ -784,19 +847,19 @@ ul.pagination .active a {
 }
 
 .bg-1 {
-  background: url("../../static/core/images/home/hero.jpg");
+  background: url("../images/home/bg.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
 
 .bg-2 {
-  background: url(../../static/core/images/subscription/subscription-back.jpg);
+  background: url(../images/subscription/subscription-back.jpg);
   background-size: cover;
   background-repeat: no-repeat;
 }
 
 .bg-3 {
-  background: url(../../static/core/images/call-to-action/cta-background.jpg);
+  background: url(../images/call-to-action/cta-background.jpg);
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -2719,7 +2782,7 @@ form textarea {
 }
 
 .footer {
-  background: #232425;
+  background: #000000;
 }
 
 .footer .block h4 {
@@ -2791,7 +2854,7 @@ form textarea {
 
 .footer-bottom {
   position: relative;
-  background: #363839;
+  background: #0e0d0d;
   padding: 25px 0;
 }
 
