@@ -25,11 +25,11 @@ class UploadScript(models.Model):
 
 class Script(models.Model):
     GENDER = (
-        ('Male', 'Male'),
-        ('Female', 'Female'),
+        ('male', 'male'),
+        ('female', 'female'),
     )
 
-    index = models.CharField(max_length=512)
+    index = models.CharField(max_length=512, default=None, null=True, blank=True)
     character_name = models.CharField(max_length=512, null=False, blank=False)
     dialogue = models.TextField(max_length=4096)
     script = models.ForeignKey(UploadScript, on_delete=models.CASCADE, related_name="scripts_name")
@@ -39,7 +39,7 @@ class Script(models.Model):
     sentiment = models.CharField(max_length=128)
 
     def __str__(self):
-        return self.script.title + "- index -" + str(self.index)
+        return self.script.title + "- index -" + str(self.id)
 
     class Meta:
         ordering = ['created_at']

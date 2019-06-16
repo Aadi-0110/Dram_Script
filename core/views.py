@@ -5,13 +5,16 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User
 from django.contrib.messages import constants
+from django.core.files import File
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 import re
 import os
-from urllib.parse import urlparse
+from django_downloadview import ObjectDownloadView
 
 # Create your views here.
+from ibm_watson import TextToSpeechV1
+
 from core.forms import SignUpForm, ContactUsForm, UploadScriptForm, CharacterForm, GenderForm, TrainedModelForm
 from core.models import UploadScript, Script, Character
 import pickle
@@ -25,39 +28,43 @@ import uuid
 #loading pickle files
 from core.models import TrainedModel
 
-obj = get_object_or_404(TrainedModel, pk=1)
-wid = open(obj.word2id.path, 'rb')
-word2id = pickle.load(wid)
-idl = open(obj.id2label.path, 'rb')
-id2label = pickle.load(idl)
-lid = open(obj.label2id.path, 'rb')
-label2id = pickle.load(lid)
-mwa = open(obj.model_with_attentions.path, 'rb')
-model_with_attentions = pickle.load(mwa)
-max_words = 178
-wid.close()
-idl.close()
-lid.close()
-mwa.close()
+# obj = get_object_or_404(TrainedModel, pk=1)
+# wid = open(obj.word2id.path, 'rb')
+# word2id = pickle.load(wid)
+# idl = open(obj.id2label.path, 'rb')
+# id2label = pickle.load(idl)
+# lid = open(obj.label2id.path, 'rb')
+# label2id = pickle.load(lid)
+# mwa = open(obj.model_with_attentions.path, 'rb')
+# model_with_attentions = pickle.load(mwa)
+# max_words = 178
+# wid.close()
+# idl.close()
+# lid.close()
+# mwa.close()
 
+text_to_speech = TextToSpeechV1(
+    iam_apikey='Ao1fYL9rUFmyeqUnH-OA5JDLSN2v1ujEi3rBHKomeJ9-',
+    url='https://gateway-lon.watsonplatform.net/text-to-speech/api'
+)
 
-def new_predict(sample_text):
-    # Encode samples
-    tokenized_sample = sample_text.split()
-    # if len(tokenized_sample) <= 6:
-    #     return 'happy'
-
-    # Make predictions
-    try:
-        encoded_samples = [[word2id[word] for word in tokenized_sample]]
-
-        # Padding
-        encoded_samples = enc(encoded_samples, maxlen=max_words)
-        label_probs, attentions = model_with_attentions.predict(encoded_samples)
-        label_probs_id = {id2label[_id]: prob for (label, _id), prob in zip(label2id.items(),label_probs[0])}
-    except:
-        return 'neutral'
-    return max(label_probs_id, key=label_probs_id.get)
+# def new_predict(sample_text):
+#     # Encode samples
+#     tokenized_sample = sample_text.split()
+#     # if len(tokenized_sample) <= 6:
+#     #     return 'happy'
+#
+#     # Make predictions
+#     try:
+#         encoded_samples = [[word2id[word] for word in tokenized_sample]]
+#
+#         # Padding
+#         encoded_samples = enc(encoded_samples, maxlen=max_words)
+#         label_probs, attentions = model_with_attentions.predict(encoded_samples)
+#         label_probs_id = {id2label[_id]: prob for (label, _id), prob in zip(label2id.items(),label_probs[0])}
+#     except:
+#         return 'neutral'
+#     return max(label_probs_id, key=label_probs_id.get)
 
 
 @login_required
@@ -123,6 +130,38 @@ def upload_script(request):
 
 @login_required
 def generate_script(request, pk):
+    obj = get_object_or_404(TrainedModel, pk=1)
+    wid = open(obj.word2id.path, 'rb')
+    word2id = pickle.load(wid)
+    idl = open(obj.id2label.path, 'rb')
+    id2label = pickle.load(idl)
+    lid = open(obj.label2id.path, 'rb')
+    label2id = pickle.load(lid)
+    mwa = open(obj.model_with_attentions.path, 'rb')
+    model_with_attentions = pickle.load(mwa)
+    max_words = 178
+    wid.close()
+    idl.close()
+    lid.close()
+    mwa.close()
+
+    def new_predict(sample_text):
+        # Encode samples
+        tokenized_sample = sample_text.split()
+        # if len(tokenized_sample) <= 6:
+        #     return 'happy'
+
+        # Make predictions
+        try:
+            encoded_samples = [[word2id[word] for word in tokenized_sample]]
+
+            # Padding
+            encoded_samples = enc(encoded_samples, maxlen=max_words)
+            label_probs, attentions = model_with_attentions.predict(encoded_samples)
+            label_probs_id = {id2label[_id]: prob for (label, _id), prob in zip(label2id.items(), label_probs[0])}
+        except:
+            return 'neutral'
+        return max(label_probs_id, key=label_probs_id.get)
     l = {'male':[], 'female':[]}
     # if Script.objects.filter(script_id=pk):
     #     # render(request, 'loader.html')
@@ -134,18 +173,47 @@ def generate_script(request, pk):
     datas = open(obj.script_file.path)
     # render(request, 'loader.html')
     for i in datas.readlines():
+        prev = ""
+        ll = []
         try:
-            index, gender, character_name, dia = [re.sub(r'\"|\n|\\', '', j) for j in i.split('" ')]
-            try:
-                l[gender].append(character_name)
-            except:
-                pass
-            je = re.sub('[^\w\s]', '', dia.lower())
-            sentiment = new_predict(je)
-            # sentiment = 'happy'
-            Script(index=index, sentiment=sentiment, character_gender=gender, character_name=character_name, dialogue=dia, script=obj).save()
+            le = [re.sub(r'\"|\n|\\', '', j) for j in i.split(':')]
+            if '' not in le:
+                if len(le) == 1:
+                    if '[' in le[0]:
+                        pass
+                    else:
+                        prev += le[0]
+                elif len(le) == 2:
+                    if len(prev) != 0:
+                        ll[-1][1] += prev
+                        prev = ""
+                    ll.append(le)
         except IndexError:
             pass
+        for character_name, dia in ll:
+            try:
+                je = re.sub('[^\w\s]', '', dia.lower())
+                try:
+                    l['male'].append(character_name)
+                except :
+                    pass
+                sentiment = new_predict(je)
+                Script(sentiment=sentiment, character_name=character_name, dialogue=dia, script=obj).save()
+            except IndexError:
+                pass
+
+        # try:
+        #     index, gender, character_name, dia = [re.sub(r'\"|\n|\\', '', j) for j in i.split('" ')]
+        #     try:
+        #         l[gender].append(character_name)
+        #     except:
+        #         pass
+        #     je = re.sub('[^\w\s]', '', dia.lower())
+        #     sentiment = new_predict(je)
+        #     # sentiment = 'happy'
+        #     Script(index=index, sentiment=sentiment, character_gender=gender, character_name=character_name, dialogue=dia, script=obj).save()
+        # except IndexError:
+        #     pass
     datas.close()
     for z in l.keys():
         l[z] = list(set(l[z]))
@@ -232,22 +300,91 @@ def set_trained_model(request):
     return render(request, 'ScriptUpload.html', {'form': form})
 
 
-def _sound_func(dia, sentiment, gender):
-    pass
+def Voice_Box(text_input, emotion, gender):
+    # print(text_input, emotion, gender)
+    text = ""
+    if gender == 'male':
+        if emotion == 'anger':
+            x = '<voice-transformation type="Custom" rate="30%" breathiness="100%">{}</voice-transformation>'
+            y = text_input
+            text = x.format(y)
+
+        elif emotion == 'love' or emotion == 'joy':
+            x = '<voice-transformation type="Custom" rate="-20%" pitch_range="100%" breathiness="100%" pitch="100%">{} </voice-transformation>'
+            y = text_input
+            text = x.format(y)
+
+        elif emotion == 'sadness' or emotion == 'fear':
+            x = '<voice-transformation type="Custom"  pitch="80%"  rate="-70%" breathiness="100%">{}</voice-transformation>'
+            y = text_input
+            text = x.format(y)
+        else:
+            text = text_input
+
+    elif gender == 'female':
+        if emotion == 'love' or emotion == 'joy':
+            x = '<speak><express-as type=\"GoodNews\">{}</express-as></speak>'
+            y = text_input
+            text = x.format(y)
+
+        elif emotion == 'sadness':
+            x = '<speak><express-as type=\"Apology\">{}</express-as></speak>'
+            y = text_input
+            text = x.format(y)
+
+        elif emotion == 'fear':
+            x = '<speak><express-as type=\"Uncertainty\">{}</express-as></speak>'
+            y = text_input
+            text = x.format(y)
+
+        elif emotion == 'anger':
+            x = '<voice-transformation type="Custom" glottal_tension="100%" breathiness="0%" pitch="67%" pitch_range="0%" timbre_extent="100%" rate="38%" hoarseness="0%" growl="0%" tremble="0%" timbre="map{400_522.5_1200_1200.0_3000_3000.0_4000_4000}"><express-as type="Excitement" level="74%"> {} </express-as></voice-transformation>'
+            y = text_input
+            text = x.format(y)
+        else:
+            text = text_input
+
+    return text
 
 
 @login_required
 def set_audio(request, pk):
-    datas = Script.objects.filter(script_id=pk).order_by('created_at')
+    datas = Script.objects.filter(script_id=pk)
 
     for data in datas:
-        try:
-            url = ""
-            filename = os.path.basename(urlparse(url).path)
-            nm = data.character_name + str(uuid.uuid4())
-            data.audio.save(nm, filename, save=True)
-        except:
+        if data.audio:
             pass
+        else:
+            try:
+                text = Voice_Box(data.dialogue, data.sentiment, data.character_gender)
+                nm = '/tmp/' + data.character_name + str(uuid.uuid4()) + ".flac"
+                if data.character_gender == 'female':
+                    with open(nm, 'wb') as audio_file:
+                        audio_file.write(
+                            text_to_speech.synthesize(
+                                text,
+                                voice='en-US_AllisonVoice',
+                                accept='audio/flac'
+                            ).get_result().content)
+                else:
+                    with open(nm, 'wb') as audio_file:
+                        audio_file.write(
+                            text_to_speech.synthesize(
+                                text,
+                                voice='en-US_MichaelVoice',
+                                accept='audio/flac'
+                            ).get_result().content)
+                # sleep(.1)
+                # data has been saved in server
+                reopen = open(nm, "rb")
+                django_file = File(reopen)
+                nm1 = data.character_name + str(uuid.uuid4()) + ".flac"
+                data.audio.save(nm1, django_file, save=True)
+            except KeyError:
+                pass
 
     messages.add_message(request, constants.SUCCESS, message="Audio Generated", )
     return redirect('home')
+
+
+return_audio_view = ObjectDownloadView.as_view(model=Script, file_field='audio')

@@ -30,4 +30,5 @@ urlpatterns = [
     path('send_script_data/<int:pk>/<str:ch>/', send_script_data, name="send_script_data"),
     path('about_us/', about_us, name="about_us"),
     path('set_audio/<int:pk>/', set_audio, name="set_audio"),
+    path('send_audio/<int:pk>/', return_audio_view, name="return_audio_view"),
 ]
